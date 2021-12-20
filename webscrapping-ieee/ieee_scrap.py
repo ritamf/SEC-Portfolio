@@ -26,16 +26,15 @@ for num_paper in range(1,50):
 
     driver.get(link4pagenum)
 
-    element_index=3
     
     while True:
         try:
             time.sleep(5)
 
-            a = driver.find_element(By.XPATH,f"/html/body/div[5]/div/div/div/div[3]/div/xpl-root/div/xpl-search-results/main/div[2]/div[2]/xpl-results-list/div[{element_index}]/xpl-results-item/div[1]/div[1]/div[2]/h2/a")
+            a = driver.find_element(By.XPATH,"/html/body/div[5]/div/div/div/div[3]/div/xpl-root/div/xpl-search-results/main/div[2]/div[2]/xpl-results-list/div[3]/xpl-results-item/div[1]/div[1]/div[2]/h2/a")
 
             try:
-                num_citations=driver.find_element(By.XPATH,f"/html/body/div[5]/div/div/div/div[3]/div/xpl-root/div/xpl-search-results/main/div[2]/div[2]/xpl-results-list/div[{element_index}]/xpl-results-item/div[1]/div[1]/div[2]/div/div[2]/span/a")
+                num_citations=driver.find_element(By.XPATH,"/html/body/div[5]/div/div/div/div[3]/div/xpl-root/div/xpl-search-results/main/div[2]/div[2]/xpl-results-list/div[3]/xpl-results-item/div[1]/div[1]/div[2]/div/div[2]/span/a")
                 num_citations_text=num_citations.text
             except:
                 num_citations_text="Papers (0)"
