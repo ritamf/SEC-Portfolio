@@ -2,7 +2,7 @@ import requests
 
 search_term = "multi agent systems"
 
-with open(f"{search_term}.csv","w") as f:
+with open(f"{search_term}2.csv","w") as f:
 
     f.write("page_num|art_num|type|date|year|num_cits|num_dwnlds|authors|title|abstract\n")
 
