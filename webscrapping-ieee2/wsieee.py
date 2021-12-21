@@ -4,9 +4,9 @@ search_term = "multi agent systems"
 
 with open(f"{search_term}.csv","w") as f:
 
-    f.write("page_num|art_num|type|year|author|title|abstract\n")
+    f.write("page_num|art_num|type|date|year|num_cits|num_dwnlds|authors|title|abstract\n")
 
-    for page_num in range(1,1000):
+    for page_num in range(1,1001):
 
         headers = {
             "Accept": "application/json, text/plain, */*",
@@ -32,9 +32,14 @@ with open(f"{search_term}.csv","w") as f:
         for record in page_data["records"]:
 
             year = "null" if "publicationYear" not in record.keys() else f"{record['publicationYear']}"
-            author = "null" if "authors" not in record.keys() else f"{record['authors'][0]['preferredName']}"
+            date = "null" if "publicationDate" not in record.keys() else f"{record['publicationDate']}"
 
-            f.write(f"{page_num}|{record['articleNumber']}|{record['displayContentType']}|{year}|{author}|{record['articleTitle']}|")
+            if "authors" in record.keys():
+                authors = ", ".join([f"{record['authors'][i]['preferredName']}" for i in range(len(record['authors']))])
+            else:
+                authors = "null"
+
+            f.write(f"{page_num}|{record['articleNumber']}|{record['displayContentType']}|{date}|{year}|{record['citationCount']}|{record['downloadCount']}|{authors}|{record['articleTitle']}|")
 
             try: 
                 abstract_link = f"{headers['Origin']}{record['documentLink']}"
@@ -48,6 +53,9 @@ with open(f"{search_term}.csv","w") as f:
                     abstract = " ".join(abstract)
 
                 f.write(f"{abstract}\n")
+
             except:
                 f.write("null\n")
-                print("Abstract could not be extracted...")
+                print(f"\nAbstract from article {record['articleNumber']} could not be extracted...")
+
+            print(f"Page number: {page_num}; article number: {record['articleNumber']}", end='\r')

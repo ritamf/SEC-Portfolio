@@ -4,7 +4,7 @@ search_term = "multi agent systems"
 
 with open(f"dummy.html","w") as f:
 
-    page_num = 2
+    page_num = 89
 
     headers = {
         "Accept": "application/json, text/plain, */*",
@@ -28,10 +28,14 @@ with open(f"dummy.html","w") as f:
     page_data = r.json()
     
     pd = page_data["records"]
-
+    
+    print(pd[24])
+    
     try: 
-        abstract_link = f"{headers['Origin']}{pd[8]['documentLink']}"
+        abstract_link = f"{headers['Origin']}{pd[24]['documentLink']}"
         abstract = requests.get(abstract_link).text.split('"twitter:description" content="',1)[1].split('" />', 1)[0].replace("&#039;","'")
+
+        author = ", ".join(["null" if "authors" not in pd[24].keys() else f"{pd[24]['authors'][i]['preferredName']}" for i in range(len(pd[24]['authors']))])
 
         if abstract.count("\n") > 0: # this is necessary for words that appear in scientific notations and such
             abstract = abstract.split("\n")
