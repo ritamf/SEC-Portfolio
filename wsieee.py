@@ -27,7 +27,7 @@ with open(f"{search_term}2.csv","w") as f:
                 headers=headers
             )
 
-        page_data = r.json()
+        page_data = r.json() # lista de dicionarios (artigos) que aparecem numa específica página de resultados
         
         for record in page_data["records"]:
 
