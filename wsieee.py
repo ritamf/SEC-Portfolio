@@ -1,8 +1,8 @@
 import requests
 
-search_term = "multi agent systems"
+theme = "multi agent systems"
 
-with open(f"{search_term}2.csv","w") as f:
+with open(f"datasets/{theme}.csv","w") as f:
 
     f.write("page_num|art_num|type|date|year|num_cits|num_dwnlds|authors|title|abstract\n")
 
@@ -15,7 +15,7 @@ with open(f"{search_term}2.csv","w") as f:
         }
         payload = {
             "newsearch": True,
-            "queryText": search_term,
+            "queryText": theme,
             "highlight": True,
             "returnFacets": ["ALL"],
             "returnType": "SEARCH",
@@ -34,10 +34,7 @@ with open(f"{search_term}2.csv","w") as f:
             year = "null" if "publicationYear" not in record.keys() else f"{record['publicationYear']}"
             date = "null" if "publicationDate" not in record.keys() else f"{record['publicationDate']}"
 
-            if "authors" in record.keys():
-                authors = ", ".join([f"{record['authors'][i]['preferredName']}" for i in range(len(record['authors']))])
-            else:
-                authors = "null"
+            authors = ", ".join([f"{record['authors'][i]['preferredName']}" for i in range(len(record['authors']))]) if "authors" in record.keys() else "null"
 
             f.write(f"{page_num}|{record['articleNumber']}|{record['displayContentType']}|{date}|{year}|{record['citationCount']}|{record['downloadCount']}|{authors}|{record['articleTitle']}|")
 
@@ -47,9 +44,7 @@ with open(f"{search_term}2.csv","w") as f:
 
                 if abstract.count("\n") > 0: # this is necessary for words that appear in scientific notations and such
                     abstract = abstract.split("\n")
-
                     abstract = [line.replace("&lt;/sub&gt;","")[-1] if line.endswith("&lt;/sub&gt;") else line.replace("&lt;/sup&gt;","")[-1] if line.endswith("&lt;/sup&gt;") else line for line in abstract]
-
                     abstract = " ".join(abstract)
 
                 f.write(f"{abstract}\n")

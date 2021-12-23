@@ -1,6 +1,6 @@
 import requests
 
-search_term = "multi agent systems"
+theme = "multi agent systems"
 
 page_num = 89
 
@@ -11,7 +11,7 @@ headers = {
 }
 payload = {
     "newsearch": True,
-    "queryText": search_term,
+    "queryText": theme,
     "highlight": True,
     "returnFacets": ["ALL"],
     "returnType": "SEARCH",
@@ -27,15 +27,19 @@ page_data = r.json()
 
 pd = page_data["records"]
 
-print(pd[24])
+record = pd[24]
 
 try: # try to request abstract link and to get the abstract 
-    abstract_link = f"{headers['Origin']}{pd[24]['documentLink']}"
+    abstract_link = f"{headers['Origin']}{record['documentLink']}"
     print(abstract_link)
     abstract = requests.get(abstract_link).text
     
     with open("dummyArticle.html","w") as f:
         f.write(abstract) # writes the obtained html page, which includes the whole abstract
+
+    authors = ", ".join([f"{record['authors'][i]['preferredName']}" for i in range(len(record['authors']))]) if "authors" in record.keys() else "null"
+
+    print(authors)
 
     # get the abstract substring out of the html page
     abstract = abstract.split('"twitter:description" content="',1)[1].split('" />', 1)[0].replace("&#039;","'")

@@ -2,7 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-df = pd.read_csv("multi agent systems.csv", delimiter="|")
+theme = "multi agent systems"
+
+df = pd.read_csv(f"datasets/{theme}.csv", delimiter="|")
 print(df.info())
 
 
