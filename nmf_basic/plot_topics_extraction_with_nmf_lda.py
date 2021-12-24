@@ -74,6 +74,7 @@ data, _ = fetch_20newsgroups(
     return_X_y=True,
 )
 data_samples = data[:n_samples]
+print(data_samples[0])
 
 # print("done in %0.3fs." % (time() - t0))
 
@@ -88,29 +89,29 @@ print(tfidf)
 print("done in %0.3fs." % (time() - t0))
 
 # # Use tf (raw term count) features for LDA.
-# print("Extracting tf features for LDA...")
-# tf_vectorizer = CountVectorizer(
-#     max_df=0.95, min_df=2, max_features=n_features, stop_words="english"
-# )
-# t0 = time()
-# tf = tf_vectorizer.fit_transform(data_samples)
-# print("done in %0.3fs." % (time() - t0))
-# print()
+print("Extracting tf features for LDA...")
+tf_vectorizer = CountVectorizer(
+    max_df=0.95, min_df=2, max_features=n_features, stop_words="english"
+)
+t0 = time()
+tf = tf_vectorizer.fit_transform(data_samples)
+print("done in %0.3fs." % (time() - t0))
+print()
 
-# # Fit the NMF model
-# print(
-#     "Fitting the NMF model (Frobenius norm) with tf-idf features, "
-#     "n_samples=%d and n_features=%d..." % (n_samples, n_features)
-# )
-# t0 = time()
-# nmf = NMF(n_components=n_components, random_state=1, alpha=0.1, l1_ratio=0.5).fit(tfidf)
-# print("done in %0.3fs." % (time() - t0))
+# # Fit the NMF model (Frobenius norm)
+print(
+    "Fitting the NMF model (Frobenius norm) with tf-idf features, "
+    "n_samples=%d and n_features=%d..." % (n_samples, n_features)
+)
+t0 = time()
+nmf = NMF(n_components=n_components, random_state=1, alpha=0.1, l1_ratio=0.5).fit(tfidf)
+print("done in %0.3fs." % (time() - t0))
 
 
-# tfidf_feature_names = tfidf_vectorizer.get_feature_names_out()
-# plot_top_words(
-#     nmf, tfidf_feature_names, n_top_words, "Topics in NMF model (Frobenius norm)"
-# )
+tfidf_feature_names = tfidf_vectorizer.get_feature_names_out()
+plot_top_words(
+    nmf, tfidf_feature_names, n_top_words, "Topics in NMF model (Frobenius norm)"
+)
 
 # # Fit the NMF model
 # print(

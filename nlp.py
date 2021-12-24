@@ -37,7 +37,7 @@ abstracts = [re.sub('[^a-zA-Z0-9 \n\.]', ' ', str(abstract[0]).lower()).replace(
 
 abstractsWords = [abstract.split(" ") for abstract in abstracts]
 
-stop_words = set(stopwords.words('english')) | {""} # used in lemmatization and stemming
+stop_words = set(stopwords.words('english')) | {"", "multi", "agent", "systems"} # used in lemmatization and stemming
 
 ### LEMMATIZATION ###
 
@@ -83,10 +83,11 @@ wordsPerArt = list(zip(artNums, [" ".join(list(d.keys())) for d in numWordsEachA
 # wordsPerArt = list(zip(artNums, [" ".join([k]*v) for words in numWordsEachArt for k,v in words.items()])) # com repeticao de palavras no mesmo artigo: resultados meh
 
 dfWordsPerArt = pd.DataFrame(wordsPerArt, columns=['num_art', 'words'])
-print(dfWordsPerArt.head()) 
+# print(dfWordsPerArt.head()) 
 
 # Store TF-IDF Vectorizer
 tv_noun = TfidfVectorizer(stop_words=stop_words, ngram_range = (1,1), max_df = .8, min_df = .01)
+print(tv_noun)
 
 # Fit and Transform speech noun text to a TF-IDF Doc-Term Matrix
 data_tv_noun = tv_noun.fit_transform(dfWordsPerArt.words)
@@ -98,7 +99,7 @@ data_dtm_noun = pd.DataFrame(data_tv_noun.toarray(), columns=tv_noun.get_feature
 data_dtm_noun.index = df.index
 
 # Visually inspect Document Term Matrix
-print(data_dtm_noun.head())
+# print(data_dtm_noun.head())
 
 nmf_model = NMF(8)
 doc_topic = nmf_model.fit_transform(data_dtm_noun)
