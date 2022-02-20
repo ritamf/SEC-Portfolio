@@ -101,9 +101,9 @@ data_dtm_noun.index = df.index
 # Visually inspect Document Term Matrix
 # print(data_dtm_noun.head())
 
-nmf_model = NMF(8)
+nmf_model = NMF(5)
 doc_topic = nmf_model.fit_transform(data_dtm_noun)
-display_topics(nmf_model, tv_noun.get_feature_names(), 5)
+display_topics(nmf_model, tv_noun.get_feature_names(), 10)
 
 
 # ## Frequencia relativa em relação ao total de palavras, em ordem decrescente
