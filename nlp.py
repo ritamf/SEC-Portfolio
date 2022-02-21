@@ -31,13 +31,15 @@ def mynlp(word):
 theme = "multi agent systems"
 
 df = pd.read_csv(f"datasets/{theme}.csv", delimiter="|")
+df = df.dropna() # remove rows with no abstract
+
 dfAbstracts = df[['abstract']]
 
 abstracts = [re.sub('[^a-zA-Z0-9 \n\.]', ' ', str(abstract[0]).lower()).replace("."," ") for abstract in dfAbstracts.values.tolist()]
 
 abstractsWords = [abstract.split(" ") for abstract in abstracts]
 
-stop_words = set(stopwords.words('english')) | {"", "multi", "agent", "systems"} # used in lemmatization and stemming
+stop_words = set(stopwords.words('english')) | {"", "multi", "agent", "agents", "system", "systems", "mas"}  # used in lemmatization and stemming
 
 ### LEMMATIZATION ###
 
