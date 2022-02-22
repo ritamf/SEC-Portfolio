@@ -15,6 +15,7 @@ from nltk.corpus import stopwords
 from time import time
 
 from mymodules.myfunctions import save_plot_top_words
+from mymodules.mystructures import mystopwords
 
 
 n_samples = 2000
@@ -48,12 +49,12 @@ abstracts = [re.sub('[^a-zA-Z0-9 \n\.]', ' ', str(abstract[0]).lower()).replace(
 
 lstWordsPerAbs = [abstract.split(" ") for abstract in abstracts]
 
-stop_words = set(stopwords.words('english')) | {"", "multi", "agent", "agents", "system", "systems", "mas"} # used in lemmatization and stemming
+print(mystopwords)
 
 ### LEMMATIZATION ###
 
 lem = WordNetLemmatizer()
-lstLemWordsPerAbs = [[lem.lemmatize(word) for word in abstract if lem.lemmatize(word) not in stop_words] for abstract in lstWordsPerAbs]
+lstLemWordsPerAbs = [[lem.lemmatize(word) for word in abstract if lem.lemmatize(word) not in mystopwords] for abstract in lstWordsPerAbs]
 
 ## Frequencia absoluta das palavras lemmitized de TODOS os artigos, em ordem decrescente
 lstLemWords = [word for paw in lstLemWordsPerAbs for word in paw]
@@ -71,7 +72,7 @@ with open(f"datasets/{theme}_lemFreqAbs.csv", "w") as f:
 
 ### STEMMING + LEMMATIZATION ###
 
-lstStemLemWordsPerAbs = [[mynlp(word) for word in abstract if word not in stop_words] for abstract in lstLemWordsPerAbs]
+lstStemLemWordsPerAbs = [[mynlp(word) for word in abstract if word not in mystopwords] for abstract in lstLemWordsPerAbs]
 
 ## Frequencia absoluta das palavras stemmed e lemmitized de CADA artigo: [{word1:count1, word2:count2,...}, {...}, ...]
 dictStemLemWordsCounter = [dict(Counter(words)) for words in lstStemLemWordsPerAbs]

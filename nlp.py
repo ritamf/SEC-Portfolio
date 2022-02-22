@@ -12,6 +12,7 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import stopwords
 
 from mymodules.myfunctions import display_topics
+from mymodules.mystructures import mystopwords
 
 
 def mynlp(word):
@@ -39,12 +40,10 @@ abstracts = [re.sub('[^a-zA-Z0-9 \n\.]', ' ', str(abstract[0]).lower()).replace(
 
 abstractsWords = [abstract.split(" ") for abstract in abstracts]
 
-stop_words = set(stopwords.words('english')) | {"", "multi", "agent", "agents", "system", "systems", "mas"}  # used in lemmatization and stemming
-
 ### LEMMATIZATION ###
 
 lem = WordNetLemmatizer()
-lemAbstractsWords = [[lem.lemmatize(word) for word in abstract if word not in stop_words] for abstract in abstractsWords]
+lemAbstractsWords = [[lem.lemmatize(word) for word in abstract if word not in mystopwords] for abstract in abstractsWords]
 
 ## Frequencia absoluta das palavras lemmitized de TODOS os artigos, em ordem decrescente
 flatLemWords = [word for paw in lemAbstractsWords for word in paw]
@@ -62,7 +61,7 @@ with open(f"datasets/{theme}_lemFreqAbs.csv", "w") as f:
 
 ### STEMMING + LEMMATIZATION ###
 
-stemLemAbstractsWords = [[mynlp(word) for word in abstract if word not in stop_words] for abstract in abstractsWords]
+stemLemAbstractsWords = [[mynlp(word) for word in abstract if word not in mystopwords] for abstract in abstractsWords]
 
 ## Frequencia absoluta das palavras stemmed e lemmitized de CADA artigo: [{word1:count1, word2:count2,...}, {...}, ...]
 numWordsEachArt = [dict(Counter(words)) for words in stemLemAbstractsWords]
@@ -88,7 +87,7 @@ dfWordsPerArt = pd.DataFrame(wordsPerArt, columns=['num_art', 'words'])
 # print(dfWordsPerArt.head()) 
 
 # Store TF-IDF Vectorizer
-tv_noun = TfidfVectorizer(stop_words=stop_words, ngram_range = (1,1), max_df = .8, min_df = .01)
+tv_noun = TfidfVectorizer(stop_words=mystopwords, ngram_range = (1,1), max_df = .8, min_df = .01)
 print(tv_noun)
 
 # Fit and Transform speech noun text to a TF-IDF Doc-Term Matrix
